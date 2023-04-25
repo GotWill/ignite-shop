@@ -20,9 +20,9 @@ export const Product = styled('div', {
   justifyContent: 'center',
   alignItems: 'center',
 
- 
 
-  img:{
+
+  img: {
     objectFit: 'cover'
   },
 
@@ -35,8 +35,9 @@ export const Product = styled('div', {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: '#202024',
     padding: '2rem',
+
 
     transform: 'translateY(110%)',
     opacity: 0,
@@ -44,21 +45,42 @@ export const Product = styled('div', {
     overflow: 'hidden',
 
     'strong': {
-        fontSize: '$lg',
-        color: '$gray100'
+      fontSize: '$lg',
+      color: '$gray100'
     },
 
     span: {
-        fontSize: '$xl',
-        fontWeight: 'bold',
-        color: '$green300'
+      fontSize: '$xl',
+      fontWeight: 'bold',
+      color: '$green300',
+    },
+
+    '.info': {
+      display: 'flex',
+      flexDirection: 'column'
+    },
+
+    button: {
+      backgroundColor: '$green300',
+      border: 0,
+      width: '46px',
+      height: '46px',
+      borderRadius: 8,
+      cursor: 'pointer',
+
     }
+
+
+
+
   },
+
+
 
   '&:hover': {
     footer: {
       transform: 'translateY(0%)',
       opacity: 1
     }
-}
+  }
 })

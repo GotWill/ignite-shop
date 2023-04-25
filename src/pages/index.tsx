@@ -7,6 +7,8 @@ import { GetStaticProps } from "next";
 import Stripe from "stripe";
 import Link from "next/link";
 import Head from "next/head";
+import { Handbag } from "@phosphor-icons/react";
+import { useState } from "react";
 
 interface HomeProps {
   products: {
@@ -18,6 +20,25 @@ interface HomeProps {
 }
 
 export default function Home({ products }: HomeProps) {
+
+  const [stateProduct, setStateProduct] = useState<HomeProps[]>([])
+
+  function saveStorage(product: HomeProps){
+
+      const newList = [...stateProduct]
+      if(!newList.includes(product)){
+        newList.push(product)
+        setStateProduct(newList)
+        localStorage.setItem("ignite-shooping", JSON.stringify(newList));
+      }
+     
+    
+
+    
+
+    
+  }
+
 
   const [sliderRef] = useKeenSlider({
     slides: {
@@ -33,19 +54,30 @@ export default function Home({ products }: HomeProps) {
         <title>Home | Ignite Shop</title>
       </Head>
 
+    
+   
 
       <HomeContainer ref={sliderRef} className="keen-slider">
         {products.map((product) => {
           return (
-            <Link href={`/product/${product.id}`} key={product.id}>
-              <Product className="keen-slider__slide" >
+            <Product className="keen-slider__slide" key={product.id}>
+              <Link href={`/product/${product.id}`}>
                 <Image src={product.imageUrl} width={520} height={480} alt="" />
-                <footer>
+              </Link>
+
+              <footer>
+                <div className="info">
                   <strong>{product.name}</strong>
                   <span>{product.price}</span>
-                </footer>
-              </Product>
-            </Link>
+                </div>
+
+                <div className="square">
+                  <button onClick={() => saveStorage(product)}>
+                    <Handbag size={24} color="#fff" />
+                  </button>
+                </div>
+              </footer>
+            </Product>
           )
         })}
 
