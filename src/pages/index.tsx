@@ -8,29 +8,46 @@ import Stripe from "stripe";
 import Link from "next/link";
 import Head from "next/head";
 import { Handbag } from "@phosphor-icons/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ProductContext } from "@/context/Products";
 
 interface HomeProps {
-  products: {
     id: string,
     name: string,
     imageUrl: string,
-    price: string
-  }[]
+    price: string,
+    defaultPriceId: string,
+  
 }
 
-export default function Home({ products }: HomeProps) {
 
-  const [stateProduct, setStateProduct] = useState<HomeProps[]>([])
+type ProductProps = {
+  products: HomeProps[]
+}
+
+export default function Home( {products} : ProductProps) {
+
+
+
+  const {addProducts, listProducts} = useContext(ProductContext)
+
 
   function saveStorage(product: HomeProps){
 
-      const newList = [...stateProduct]
-      if(!newList.includes(product)){
-        newList.push(product)
-        setStateProduct(newList)
-        localStorage.setItem("ignite-shooping", JSON.stringify(newList));
-      }
+      const newList = [...listProducts]
+
+      newList.push({
+        id: product.id,
+        name: product.name,
+        imageUrl: product.imageUrl,
+        price: product.price,
+        defaultPriceId: product.defaultPriceId,
+        
+      })
+     
+
+      addProducts(newList)
+
      
     
 
@@ -106,6 +123,7 @@ export const getStaticProps: GetStaticProps = async () => {
         style: 'currency',
         currency: 'BRL'
       }).format(price.unit_amount as number / 100),
+      defaultPriceId: price.id
 
     }
   })

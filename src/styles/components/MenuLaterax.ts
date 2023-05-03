@@ -8,7 +8,6 @@ export const Container = styled('div', {
     right: 0,
     width: '480px',
     minHeight: '100vh',
-    height: '110vh',
     backgroundColor: '#202024',
     boxShadow: '-4px 0px 30px rgba(0, 0, 0, 0.8)',
     zIndex: 1000,

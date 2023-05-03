@@ -1,10 +1,11 @@
+import { ProductContext } from "@/context/Products"
 import { stripe } from "@/lib/stripe"
 import { ImageContainer, ProductContainer, ProductDetails } from "@/styles/pages/product"
 import axios from "axios"
 import { GetStaticPaths, GetStaticProps } from "next"
 import Head from "next/head"
 import Image from "next/image"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import Stripe from "stripe"
 
 interface ProductProps {
@@ -18,24 +19,51 @@ interface ProductProps {
     }
 }
 
+type Props = {
+        id: string,
+        name: string,
+        imageUrl: string,
+        price: string,
+        description: string,
+        defaultPriceId: string,
+}
+
 
 export default function Product({ product }: ProductProps) {
+    console.log(product.defaultPriceId)
 
-    const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
+    const {addProducts, listProducts} = useContext(ProductContext)
 
-    async function handlePriceProduct() {
-        try {
-            setIsCreatingCheckoutSession(true)
-            const response = await axios.post('/api/checkout', {
-                priceId: product.defaultPriceId
-            })
+    // const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
 
-            const { checkoutUrl } = response.data;
-            window.location = checkoutUrl;
-        } catch (err) {
-            setIsCreatingCheckoutSession(false)
-            alert("Falha ao redirecionar ao checkout")
-        }
+    // async function handlePriceProduct() {
+    //     try {
+    //         setIsCreatingCheckoutSession(true)
+    //         const response = await axios.post('/api/checkout', {
+    //             priceId: product.defaultPriceId
+    //         })
+
+    //         const { checkoutUrl } = response.data;
+    //         window.location = checkoutUrl;
+    //     } catch (err) {
+    //         setIsCreatingCheckoutSession(false)
+    //         alert("Falha ao redirecionar ao checkout")
+    //     }
+    // }
+
+    function addProductList(Item: Props ){
+      const newList = [...listProducts]
+
+      newList.push({
+        id: Item.id,
+        imageUrl: Item.imageUrl,
+        name: Item.name,
+        price: Item.price,
+        defaultPriceId: Item.defaultPriceId
+      })
+
+      addProducts(newList)
+
     }
 
     return (
@@ -56,8 +84,8 @@ export default function Product({ product }: ProductProps) {
 
                     <p>{product.description}</p>
 
-                    <button disabled={isCreatingCheckoutSession} onClick={handlePriceProduct}>
-                        Comprar agora
+                    <button onClick={ () =>  addProductList(product)}>
+                        Adicionar a sacola
                     </button>
                 </ProductDetails>
             </ProductContainer>
